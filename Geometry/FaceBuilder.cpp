@@ -9,6 +9,10 @@
 
 #include "FaceBuilder.h"
 
+namespace OpenEngine {
+    namespace Geometry {
+
+
 FaceBuilder::FaceBuilder() {
     fs = new FaceSet();
     mat = new Material();
@@ -126,3 +130,5 @@ void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin,
 }
 
 
+    }
+}

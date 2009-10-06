@@ -12,6 +12,10 @@
 
 using namespace OpenEngine::Geometry;
 
+namespace OpenEngine {
+namespace Geometry {
+
+
 
 class FaceBuilder {
     
@@ -34,3 +38,6 @@ private:
     void AddSquare(Vector<3,float>,Vector<3,float>,Vector<3,float>,Vector<3,float>);
     FaceSet* GetFaceSet();
 };
+
+}
+}
