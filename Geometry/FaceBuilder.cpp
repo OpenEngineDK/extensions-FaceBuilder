@@ -8,6 +8,7 @@
  */
 
 #include "FaceBuilder.h"
+#include <Logging/Logger.h>
 
 namespace OpenEngine {
     namespace Geometry {
@@ -88,9 +89,68 @@ void FaceBuilder::AddSquare(FaceSet* fs, FaceState state,
     
 }
 
+void FaceBuilder::AddTriangle(FaceSet* fs, FaceState state, Vector<3,float> v1, Vector<3,float> v2, Vector<3,float> v3) {
+
+    Face *f1 = new Face(v1,v2,v3);
+    
+    Vector<3,float> norm = (v3-v1) % (v2-v1);
+    norm.Normalize();
+
+    f1->norm[0] = f1->norm[1] = f1->norm[2] = norm;
+    f1->colr[0] = f1->colr[1] = f1->colr[2] = state.color;
+    
+    fs->Add(FacePtr(f1));
+
+}
 
 FaceSet* FaceBuilder::GetFaceSet() {
     return fs;
+}
+
+void FaceBuilder::MakeASphere(FaceSet* fs, FaceState state, Vector<3,float> origin, float radius, int resolution) {
+    
+    // x = x_0 + r * sin ( theta ) * cos ( phi )
+    // y = y_0 + r * sin ( theta ) * sin ( phi )
+    // z = z_0 + r * cos ( theta ) 
+
+    float fRes = float(resolution);
+
+    float dPhi = 2*PI/fRes;
+    float dTheta = PI/fRes;
+
+    for (int i=0;i<2*resolution;i++) {
+        float phi = PI*(i/fRes)+dPhi;
+
+        for (int j=0;j<resolution;j++) {            
+            
+            float theta = PI*(j/fRes)+dTheta;
+            logger.info << phi << " " << theta << logger.end;
+            if (abs(theta - PI) < 0.0001)
+                continue;
+
+            Vector<3,float> a(origin[0] + radius * sin(theta) * cos(phi),
+                              origin[1] + radius * sin(theta) * sin(phi),
+                              origin[2] + radius * cos(theta));
+            
+            Vector<3,float> b(origin[0] + radius * sin(theta) * cos(phi+dPhi),
+                              origin[1] + radius * sin(theta) * sin(phi+dPhi),
+                              origin[2] + radius * cos(theta));
+
+            Vector<3,float> c(origin[0] + radius * sin(theta+dTheta) * cos(phi),
+                              origin[1] + radius * sin(theta+dTheta) * sin(phi),
+                              origin[2] + radius * cos(theta+dTheta));
+           
+            Vector<3,float> d(origin[0] + radius * sin(theta+dTheta) * cos(phi+dPhi),
+                              origin[1] + radius * sin(theta+dTheta) * sin(phi+dPhi),
+                              origin[2] + radius * cos(theta+dTheta));
+
+            AddTriangle(fs, state, a,b,c);
+            AddTriangle(fs, state, b,d,c);
+            
+            
+        }
+    }
+
 }
 
 void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin, Vector<3,float> size) {

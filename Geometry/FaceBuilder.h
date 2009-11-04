@@ -28,6 +28,8 @@ public:
     
     static void MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin, Vector<3,float> size);    
     static void AddSquare(FaceSet* fs, FaceState state, Vector<3,float>,Vector<3,float>,Vector<3,float>,Vector<3,float>);
+    static void AddTriangle(FaceSet* fs, FaceState state, Vector<3,float>,Vector<3,float>,Vector<3,float>);
+    static void MakeASphere(FaceSet* fs, FaceState state, Vector<3,float> origin, float radius, int resolution);
 
 private:
     FaceSet *fs;
