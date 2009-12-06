@@ -11,7 +11,7 @@
 #include <Logging/Logger.h>
 
 namespace OpenEngine {
-    namespace Geometry {
+namespace Geometry {
 
 
 FaceBuilder::FaceBuilder() {
@@ -71,17 +71,17 @@ void FaceBuilder::AddSquare(FaceSet* fs, FaceState state,
     f1->texc[1] = Vector<2,float>(0,1);
     f1->texc[2] = Vector<2,float>(1,1);
     
-    // f1->colr[0] = state.color;
-    // f1->colr[1] = state.color;
-    // f1->colr[2] = state.color;
+    f1->colr[0] = state.color;
+    f1->colr[1] = state.color;
+    f1->colr[2] = state.color;
     f1->mat = MaterialPtr(state.mat);
     
     fs->Add(FacePtr(f1));
     
     Face *f2 = new Face(a,c,d);
-    // f2->colr[0] = state.color;
-    // f2->colr[1] = state.color;
-    // f2->colr[2] = state.color;
+    f2->colr[0] = state.color;
+    f2->colr[1] = state.color;
+    f2->colr[2] = state.color;
     
     f2->norm[0] = norm;
     f2->norm[1] = norm;
@@ -164,6 +164,12 @@ void FaceBuilder::MakeASphere(FaceSet* fs, FaceState state, Vector<3,float> orig
 }
 
 void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin, Vector<3,float> size) {
+    list<FaceState> states;
+    states.push_back(state);
+    MakeABox(fs, states, origin, size);
+}        
+
+void FaceBuilder::MakeABox(FaceSet* fs, list<FaceState> states, Vector<3,float> origin, Vector<3,float> size) {
     
     float width = size.Get(0)/2;
     float depth = size.Get(1)/2;
@@ -177,6 +183,8 @@ void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin,
     
     //fb.mat->specular = Vector<4,float>(.3,.3,.3,1);
     //fb.mat->shininess = 1;
+
+
     
     Vector<3,float> a = Vector<3,float>(x-width,y-height,z+depth);
     Vector<3,float> b = Vector<3,float>(x-width,y+height,z+depth);
@@ -186,19 +194,49 @@ void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin,
     Vector<3,float> f = Vector<3,float>(x+width,y-height,z-depth);
     Vector<3,float> g = Vector<3,float>(x-width,y+height,z-depth);
     Vector<3,float> h = Vector<3,float>(x-width,y-height,z-depth);
-    
+
+    FaceState state;
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
     
     
     AddSquare(fs, state, a, b, c, d);
+    
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
     AddSquare(fs, state, d, c, e, f);
     
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
+    
     AddSquare(fs, state, f, e, g, h);
+    
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
     AddSquare(fs, state, h, g, b, a);
     
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
+    
     AddSquare(fs, state, c, b, g, e);
-    AddSquare(fs, state, h, a, d, f);
+    
+    if (!states.empty()) {
+        state = states.front();
+        states.pop_front();
+    }
+    
 }
 
-
-    }
+    
+}
 }
