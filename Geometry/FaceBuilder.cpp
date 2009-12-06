@@ -66,24 +66,34 @@ void FaceBuilder::AddSquare(FaceSet* fs, FaceState state,
     f1->norm[0] = norm;
     f1->norm[1] = norm;
     f1->norm[2] = norm;
+
+    f1->texc[0] = Vector<2,float>(0,0);
+    f1->texc[1] = Vector<2,float>(0,1);
+    f1->texc[2] = Vector<2,float>(1,1);
     
-    f1->colr[0] = state.color;
-    f1->colr[1] = state.color;
-    f1->colr[2] = state.color;
-    //f1->mat = MaterialPtr(mat);
+    // f1->colr[0] = state.color;
+    // f1->colr[1] = state.color;
+    // f1->colr[2] = state.color;
+    f1->mat = MaterialPtr(state.mat);
     
     fs->Add(FacePtr(f1));
     
     Face *f2 = new Face(a,c,d);
-    f2->colr[0] = state.color;
-    f2->colr[1] = state.color;
-    f2->colr[2] = state.color;
+    // f2->colr[0] = state.color;
+    // f2->colr[1] = state.color;
+    // f2->colr[2] = state.color;
     
     f2->norm[0] = norm;
     f2->norm[1] = norm;
     f2->norm[2] = norm;
+
+
+    f2->texc[0] = Vector<2,float>(0,0);
+    f2->texc[1] = Vector<2,float>(1,1);
+    f2->texc[2] = Vector<2,float>(1,0);
     
-    //f2->mat = MaterialPtr(mat);
+    f2->mat = MaterialPtr(state.mat);
+
     
     fs->Add(FacePtr(f2));
     
