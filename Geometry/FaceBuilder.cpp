@@ -172,8 +172,9 @@ void FaceBuilder::MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin,
 void FaceBuilder::MakeABox(FaceSet* fs, list<FaceState> states, Vector<3,float> origin, Vector<3,float> size) {
     
     float width = size.Get(0)/2;
-    float depth = size.Get(1)/2;
-    float height = size.Get(2)/2;
+    float height = size.Get(1)/2;
+    float depth = size.Get(2)/2;
+
     
     float x = origin.Get(0);
     float y = origin.Get(1);

@@ -25,6 +25,7 @@ public:
     struct FaceState {
         Vector<4,float> color;    
         MaterialPtr mat;
+        FaceState() : mat(MaterialPtr(new Material())) {}
     };
     
     static void MakeABox(FaceSet* fs, FaceState state, Vector<3,float> origin, Vector<3,float> size);    
